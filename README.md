@@ -84,5 +84,4 @@ nltk>=3.8
 evaluate>=0.4
 tqdm
 ```
-
-A CUDA-capable GPU is strongly recommended for Notebook 1 (transformer fine-tuning). Notebook 2 uses frozen embeddings and runs on CPU, though GPU speeds up the embedding extraction step.
+A CUDA-capable GPU is strongly recommended for Notebook 1 (transformer fine-tuning). Notebook 2 uses frozen embeddings and runs on CPU.
