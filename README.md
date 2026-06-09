@@ -7,26 +7,7 @@ This repository contains the text-based and hybrid experiments from my research 
 
 > **Data availability:** Patient-level data are not included in this repository in accordance with data privacy requirements. See [Data](#data) below for the expected file layout.
 
----
 
-## Repository Structure
-
-```
-.
-├── transformer_text_models.ipynb     # Notebook 1: transformer fine-tuning (5 models)
-├── ml_token_embeddings.ipynb         # Notebook 2: classical ML + token embeddings (4 models)
-├── README.md
-├── requirements.txt
-└── data/                             # Not included — see Data section below
-    ├── texts_train.csv               # prognosis_english, prognosis_danish, all_texts
-    ├── texts_val.csv
-    ├── texts_test.csv
-    ├── labels_train.csv
-    ├── labels_val.csv
-    └── labels_test.csv
-```
-
----
 
 ## Notebook 1 — Transformer Fine-Tuning
 
@@ -84,11 +65,7 @@ Evaluation: 5 outer folds × 5 inner folds × 5 trials, with `TunedThresholdClas
 ---
 
 ## Data
-
-Both notebooks read from the same source file:
-
-```
-data/Erda, final, anonymized,for LLM and multimodal.csv
+Not avaialbe publically due to ethical aspects.
 ```
 
 Required columns:
@@ -130,34 +107,3 @@ pip install -r requirements.txt
 ```
 
 A CUDA-capable GPU is strongly recommended for Notebook 1 (transformer fine-tuning). Notebook 2 uses frozen embeddings and runs on CPU, though GPU speeds up the embedding extraction step.
-
----
-
-## Key Design Decisions
-
-**Why two approaches?**
-Fine-tuning transformers end-to-end (Notebook 1) allows the model to adapt its representations to the task, but requires more compute and a held-out test set for evaluation. Using frozen embeddings with classical ML (Notebook 2) is faster, more interpretable, and evaluated entirely within nested CV — making the two approaches complementary rather than redundant.
-
-**Focal loss (Notebook 1)**
-The dataset is class-imbalanced. Focal loss with full inverse-frequency class weights (`n / (2 × count_per_class)`) down-weights easy examples and scales the loss penalty in proportion to class imbalance.
-
-**Threshold calibration (both notebooks)**
-The default 0.5 decision threshold is suboptimal for imbalanced data. In Notebook 1 the threshold is selected on the validation set; in Notebook 2 `TunedThresholdClassifierCV` selects it on each training fold within the outer CV loop.
-
-**Danish-BERT rationale (Notebook 1)**
-Clinical notes were originally written in Danish. Machine translation introduces artefacts. Running `Maltehb/danish-bert-botxo` directly on the source text tests whether a native-language model can outperform the English models working on translated input.
-
-**Nested CV rationale (Notebook 2)**
-A single train/test split would be unreliable given the dataset size. Nested CV separates hyperparameter selection (inner loop) from performance estimation (outer loop), avoiding optimistic bias. Repeating over 5 trials with different random seeds quantifies variance.
-
----
-
-## Citation
-
-If you use this code, please cite the associated paper (details to be added upon publication).
-
----
-
-## License
-
-This code is released for research reproducibility. The clinical dataset is not redistributable.
