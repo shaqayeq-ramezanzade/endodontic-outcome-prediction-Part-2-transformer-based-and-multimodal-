@@ -68,21 +68,6 @@ Evaluation: 5 outer folds × 5 inner folds × 5 trials, with `TunedThresholdClas
 Not avaialbe publically due to ethical aspects.
 ```
 
-Required columns:
-
-| Column | Type | Description |
-|---|---|---|
-| `prognosis_english` | string | Translated free-text prognosis note |
-| `prognosis_danish` | string | Original Danish prognosis note (Notebook 1 only) |
-| `is_effective_romexis` | int (0/1) | Treatment outcome label |
-| `signs_symptoms_col` | string | Signs & symptoms text (Notebook 1, all-texts experiments) |
-
-> Update `TEXT_COL_DANISH` and `ALL_TEXT_COLS` in Notebook 1, Section 2 to match your actual column names. Run Section 2 once to generate the pre-split CSV files used by the rest of Notebook 1.
-
-Notebook 2 uses the raw CSV directly and does not depend on the pre-split files.
-
----
-
 ## Requirements
 
 ```
@@ -98,12 +83,6 @@ matplotlib>=3.7
 nltk>=3.8
 evaluate>=0.4
 tqdm
-```
-
-Install with:
-
-```bash
-pip install -r requirements.txt
 ```
 
 A CUDA-capable GPU is strongly recommended for Notebook 1 (transformer fine-tuning). Notebook 2 uses frozen embeddings and runs on CPU, though GPU speeds up the embedding extraction step.
